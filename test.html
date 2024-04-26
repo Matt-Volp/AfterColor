@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adjustable Value</title>
+    <style>
+        .value-field {
+            width: 100px;
+            height: 30px;
+            border: 1px solid black;
+            display: inline-block;
+            text-align: center;
+            line-height: 30px;
+            user-select: none;
+            cursor: ew-resize;
+        }
+    </style>
+</head>
+<body>
+
+<div class="value-field" id="valueField">0</div>
+
+<script>
+    let value = 0;
+    let dragging = false;
+    let startX = 0;
+    let startValue = 0;
+    let step = 1; // Default step size
+
+    const valueField = document.getElementById('valueField');
+
+    function updateValue(newValue) {
+        value = newValue;
+        valueField.innerText = value.toFixed(1); // Display value with one decimal place
+    }
+
+    function onMouseMove(event) {
+        if (!dragging) return;
+
+        const diffX = event.clientX - startX;
+
+        updateValue(startValue + diffX * step);
+    }
+
+    function onMouseDown(event) {
+        dragging = true;
+        startX = event.clientX;
+        startValue = value;
+        step = event.shiftKey ? 10 : (event.ctrlKey ? 0.1 : 1); // Update step size
+    }
+
+    function onMouseUp() {
+        dragging = false;
+    }
+
+    document.addEventListener('mousedown', onMouseDown);
+    document.addEventListener('mouseup', onMouseUp);
+    document.addEventListener('mousemove', onMouseMove);
+</script>
+
+</body>
+</html>
